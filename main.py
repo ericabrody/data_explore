@@ -1,70 +1,36 @@
 #! /usr/bin/python3
 import csv
+import statistics
+from helpers import *
+from funct import *
 
-dataDictionary = {
-  'SMOKE100': {
-    '': 'missing',
-    '1': 'smoker',
-    '2': 'never smoked',
-    '7': "don't know",
-    '9': 'refused'
-  }
-}
-
+# read in the datafiles as dictionary of list of dictionaries
 datafiles = ['smallbr2013.csv','smallbr2014.csv']
 data = {}
-for name in datafiles:
-  with open(name) as f:
+for file in datafiles:
+  with open(file) as f:
+    reader = csv.DictReader(f)
     rows = []
-    for row in csv.DictReader(f):
+    for row in reader: # creates a list of dictionaries where each case/row is a dictionary with a key-value pair for each variable
       rows.append(row)
-    data[name] =  rows
+    data[file] =  rows # storing each file's list of rows in the dictionary called data, key of this dictionary is filename
+    # and the values of this dictionary are the list of dictionaries
+    print (file, reader.fieldnames) #fieldnames = property of dictreader
 
-# To view the data...
-# for v in data['smallbr2014.csv']:
-#   print (v)
+# To view the variables names (i.e., keys)...from the first row, but could have been any row
+print (data['smallbr2014.csv'][0].keys())
 
+twovarfreq = twovar(data['smallbr2014.csv'], '_STATE', 'EXERANY2')
+print ('Two Var output: ', twovarfreq)
 
-def distribution(data, whichVar):
-  '''Create a dictionary of results for a specific variable, 
-    where the key is each response value that is in the dataset and
-    value is the number of times it occurs in the data'''
-  result = {}
-  keyLookup = None
-  if whichVar in dataDictionary:
-    keyLookup = dataDictionary[whichVar]
-  for row in data:
-    value = row[whichVar]
-    if keyLookup is not None:
-      value = keyLookup[value] # remaps values from raw number to label
-    if value not in result:
-      result[value] = 1
-    else:
-      result[value] += 1
-  return result 
+univariate (data['smallbr2014.csv'], 'SLEPTIM1')
 
-def table(resultDistrib):
-  ''' Creates a frequency table of the variable of interest from the result
-  of the function "distribution" '''
-  keys = sorted(resultDistrib.keys(), key = lambda  key: resultDistrib[key], reverse= True)
-  longestlength = 0
-  for key in keys:
-    if len(key) > longestlength:
-      longestlength = len(key)
-  for key in keys:
-    print (key, " "*(longestlength-len(key)+2), resultDistrib[key], "\t", resultDistrib[key]/sum(resultDistrib.values()))
+whichVar = 0
+try:
+  while whichVar != '':
+    whichVar = input('Which variable are you interested in?')
+    table(distribution(data['smallbr2014.csv'], whichVar))
+    histogram (distribution(data['smallbr2014.csv'], whichVar))
+except:
+  print ('Thank you for using this program.')
 
-table(distribution(data['smallbr2014.csv'], 'SMOKE100'))
-
-def histogram(resultDistrib):  
-  ''' Creates a histogram of the variable of interest from the result
-  of the function "distribution" '''
-  keys = sorted(resultDistrib.keys(), key = lambda  key: resultDistrib[key], reverse= True)
-  longestlength = 0
-  for key in keys:
-    if len(key) > longestlength:
-      longestlength = len(key) 
-  for key in keys:
-    print (key, " "*(longestlength-len(key)+2), '*'*int(100*resultDistrib[key]/sum(resultDistrib.values())), '\t', int(100*resultDistrib[key]/sum(resultDistrib.values())), "%")
-
-histogram (distribution(data['smallbr2014.csv'], 'SMOKE100'))
