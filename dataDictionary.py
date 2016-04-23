@@ -18,7 +18,7 @@ dataDictionary = {
     },
   'POORHLTH' : {
     '': 'missing',
-    '88': 'none',
+    '88': 0,
     '77': "don't know",
     '99': 'refused'
     },
@@ -62,10 +62,3 @@ dataDictionary = {
   }
 }
 
-def mapResponse (var, value):
-  ''' function to assign response value mappings from dataDictionary to data'''
-  newlabel=value
-  if var in dataDictionary:
-    if value in dataDictionary[var]:
-      newlabel = dataDictionary[var][value] # remaps values from raw number to label, if number not mapped, actual value remains - because newlabel is set to value above
-  return newlabel

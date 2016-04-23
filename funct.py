@@ -1,5 +1,5 @@
 import statistics
-from helpers import *
+from dataDictionary import *
 from funct import *
 
 def distribution(data, whichVar):
@@ -56,43 +56,85 @@ def twovar (data, var1, var2):
       result[value1][value2] += 1
   return result      
   
-  # Continuous variables in the dataset: poorhealth, sleptim1, avedrnk2
+# Continuous variables in the dataset: poorhealth, sleptim1, avedrnk2
+#  need to remove the missing, don't know, and refused responses
+def univbyvar2 (data, var1, var2):
+  ''' Create min, max, and mean for continous variables by state or sex'''
+  var1values = {}
+  for row in data:
+    v = row[var1]
+    if v not in var1values:
+      var1values[v] = [row] # the first time encounter a specific value for var1 (state or sex), e.g., first time encounter '9' for state, create a new list of dictionaries for var1value = '9'
+    else:
+      var1values[v].append(row) # when see a value a second+ time, we append another dictionary to the list of dictionary - each of these dictionaries is a row of the data
+  result = {}
+  for k in var1values.keys():
+    result[k] = univariate(var1values[k], var2) # create a dictionary for each level/response of var1
+  return result
+  
+# Continuous variables in the dataset: poorhealth, sleptim1, avedrnk2
 # univariate stats for poorhealth
-#  need to remove the missing responses
+#  need to remove the missing, don't know, and refused responses
 def univariate (data, var):
+  mean = createaverage(data, var)
+  mode = createmode(data, var)
+  valueslist = extractvalues (data, var)
+  medianvalue = createmedian(valueslist)
+  minvars = min(valueslist)
+  maxvars = max(valueslist)
+  result = {'average': mean, 'min': minvars, 'max': maxvars, 'mode': mode, 'Median': medianvalue}
+  return result
+
+def extractvalues (data, var):
+  ''' create a list of all values for a particular variable (var) in data '''
+  valueslist = []
+  for row in data:
+    mapped = mapResponse(var, row[var])
+    if mapped != 'refused' and mapped != "don't know" and mapped != 'missing' and row[var] != '':
+      vars = int(row[var]) 
+      valueslist.append(vars)
+  return valueslist
+
+def mapResponse (var, value):
+  ''' function to assign response value mappings from dataDictionary to data'''
+  newlabel=value
+  if var in dataDictionary:
+    if value in dataDictionary[var]:
+      newlabel = dataDictionary[var][value] # remaps values from raw number to label, if number not mapped, actual value remains - because newlabel is set to value above
+  return newlabel
+  
+def createmedian(valueslist):
+  valueslist = sorted(valueslist)
+  numvalues = len(valueslist)
+  if numvalues % 2 == 1:
+    medianvalue = valueslist[numvalues//2]
+  else:
+    medianvalue = (valueslist[numvalues//2 - 1] + valueslist[numvalues//2])/2
+  return medianvalue
+  
+def createaverage (data, var):
   totalvars = 0
   countvars = 0
-  minvar = 500 
-  maxvar = 0 
   for row in data:
     vars = row[var]
     if vars != '77' and vars != '88' and vars != '99' and vars != '':
       vars = int(vars) 
       totalvars += vars
       countvars += 1
-      if vars < minvar:
-        minvar = vars
-      if vars > maxvar:
-        maxvar = vars
   avevar = round(totalvars/countvars, 2)
-  #calculate mode
+  return avevar
+  
+def createmode (data, var):
   premode = distribution(data, var)
-  maxv = 0
+  mode = 0
+  keymode = None
   for k,v in premode.items():
-    if k != 'missing':
-      if v > maxv:
-        maxv = v
-        maxk = k
-  modevars = maxk
-  # calculate median
-  medianlist = []
-  for row in data:
-    vars = row[var]
-    if vars != '77' and vars != '88' and vars != '99' and vars != '':
-      vars = int(vars) 
-      medianlist.append(vars)
-  medianvars = statistics.median(medianlist)
-  print ('Total: ', vars, 'Count: ', countvars, 'Average : ', avevar)
-  print ('Min : ', minvar, 'Max : ', maxvar, 'Mode : ', modevars)
-  print ('Median : ', medianvars)
-  print (premode)
+    if k != 'missing' and k != 'refused' and k != "don't know" :
+      v=int(v)
+      if v > mode:
+        mode = v
+        keymode = [k] # creates a new list with just k in it
+      elif v == mode: # to accomodate condition that there are multiple modes in the list of values
+        keymode.append(k)
+  return keymode
+  
