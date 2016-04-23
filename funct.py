@@ -28,8 +28,9 @@ def table(resultDistrib):
   for key in keys:
     if len(key) > longestlength:
       longestlength = len(key)
+  print ("Value", " "*(longestlength-len("value")+2), "Num Responses", "\t", "Percent of Responses")
   for key in keys:
-    print (key, " "*(longestlength-len(key)+2), resultDistrib[key], "\t", round(100*resultDistrib[key]/sum(resultDistrib.values(), 2)), "%")
+    print (key, " "*(longestlength-len(key)+2), resultDistrib[key], "\t\t\t", round(100*resultDistrib[key]/sum(resultDistrib.values(), 2)), "%")
 
 def histogram(resultDistrib):  
   ''' Creates a histogram of the variable of interest from the result
@@ -82,7 +83,7 @@ def univariate (data, var):
   medianvalue = createmedian(valueslist)
   minvars = min(valueslist)
   maxvars = max(valueslist)
-  result = {'average': mean, 'min': minvars, 'max': maxvars, 'mode': mode, 'Median': medianvalue}
+  result = {'average': mean, 'min': minvars, 'max': maxvars, 'mode': mode, 'median': medianvalue}
   return result
 
 def extractvalues (data, var):

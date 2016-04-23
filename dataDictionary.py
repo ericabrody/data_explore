@@ -64,3 +64,16 @@ dataDictionary = {
 
 continousVars = ['POORHLTH', 'SLEPTIM1', 'AVEDRNK2', 'MAXDRNKS']
 categoricalVars = ['SMOKE100', 'GENHLTH', 'SMOKDAY2','_STATE', 'EXERANY2', 'SEX']
+
+varQuestion = {
+  'SMOKE100': 'Have you smoked at least 100 cigarettes in your entire life?', 
+  'GENHLTH' : 'Would you say that in general your health is',
+  'POORHLTH': 'During the past 30 days, for about how many days did poor physical or mental health keep you from doing your usual activities, such as self-care, work, or recreation?',
+  'EXERANY2': 'During the past month, other than your regular job, did you participate in any physical activities or exercises such as running, calisthenics, golf, gardening, or walking for exercise?',
+  'SLEPTIM1': 'On average, how many hours of sleep do you get in a 24-hour period?',
+  'SEX' : 'Sex of respondent',
+  'SMOKDAY2' : 'Do you now smoke cigarettes every day, some days, or not at all?',
+  'AVEDRNK2' : 'One drink is equivalent to a 12-ounce beer, a 5-ounce glass of wine, or a drink with one shot of liquor. During the past 30 days, on the days when you drank, about how many drinks did you drink on the average?',
+  'MAXDRNKS' : 'During the past 30 days, what is the largest number of drinks you had on any occasion?' ,
+  "_STATE" : 'State where respondent lives'
+  }
