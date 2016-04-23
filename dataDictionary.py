@@ -38,7 +38,7 @@ dataDictionary = {
     '1': 'male',
     '2': 'female',
   },
-  'SMOKEDAY2' : {
+  'SMOKDAY2' : {
     '': 'missing',
     '1': 'every day',
     '2': 'some days',
@@ -46,7 +46,7 @@ dataDictionary = {
     '7': "don't know",
     '9': 'refused'
   },
-  'AVERDRNK2' : {
+  'AVEDRNK2' : {
      '': 'missing',
     '77': "don't know",
     '99': 'refused'
@@ -62,3 +62,5 @@ dataDictionary = {
   }
 }
 
+continousVars = ['POORHLTH', 'SLEPTIM1', 'AVEDRNK2', 'MAXDRNKS']
+categoricalVars = ['SMOKE100', 'GENHLTH', 'SMOKDAY2','_STATE', 'EXERANY2', 'SEX']
