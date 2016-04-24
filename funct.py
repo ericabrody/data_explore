@@ -1,4 +1,3 @@
-import statistics
 from dataDictionary import *
 from funct import *
 
@@ -139,3 +138,62 @@ def createmode (data, var):
         keymode.append(k)
   return keymode
   
+def printcateg (data, catvar):
+  print (catvar, varQuestion[catvar])
+  thingtoprint = distribution(data, catvar)
+  table (thingtoprint)
+  print ()
+  histogram (thingtoprint)
+  print()
+
+def printcontinuous (data, contvar):
+  ''' Nice printout of a single continuous variable'''
+  toprint = univariate(data, contvar)
+  sep = ', '
+  modeStrings = []
+  for v in toprint['mode']: # for each item in the list of integers representing modes, this loop turns each item into a string, so .join works
+    modeStrings.append(str(v))
+  print (contvar, varQuestion[contvar])
+  print ('Minimum = ', toprint['min'])
+  print ('Maximum = ', toprint['max'])
+  print ('Mean    = ', toprint['average'])
+  print ('Median  = ', toprint['median'])
+  print ('Mode    = ', sep.join(modeStrings))
+
+def printcontbysexstate (data, categvar, contvar):
+  ''' Nice printout of a continuous variable by sex or state'''
+  toprint= univbyvar2(data, categvar, contvar)
+  catkeys = list(toprint.keys())
+  if len(catkeys) != 2:
+    print ('hm, there are more than two category one choices')
+    return
+  print (contvar, varQuestion[contvar])
+  print ('          {:>10s} {:>10s}'.format(mapResponse(categvar,catkeys[0]), mapResponse(categvar,catkeys[1])))
+  print ('Minimum = {:10.2f} {:10.2f}'.format(toprint[catkeys[0]]['min'], toprint[catkeys[1]]['min']))
+  print ('Maximum = {:10.2f} {:10.2f}'.format(toprint[catkeys[0]]['max'], toprint[catkeys[1]]['max']))
+  print ('Mean    = {:10.2f} {:10.2f}'.format(toprint[catkeys[0]]['average'], toprint[catkeys[1]]['average']))
+  print ('Median  = {:10.2f} {:10.2f}'.format(toprint[catkeys[0]]['median'],toprint[catkeys[1]]['median']))
+  print ('Mode    = {:>10s} {:>10s}'.format(modelisttostring(toprint[catkeys[0]]['mode']), modelisttostring(toprint[catkeys[1]]['mode'])))
+  print ()
+
+def modelisttostring (modevalues):
+  sep = ', '
+  modeStrings = []
+  for v in modevalues: # for each item in the list of integers representing modes, this loop turns each item into a string, so .join works
+    modeStrings.append(str(v))
+  return sep.join(modeStrings)
+
+def printcategbysexstate (data, sexstate, categvar):
+  ''' Nice printout of a categorical variable by sex or state'''
+  toprint= twovar(data, sexstate, categvar)
+  catkeys = list(toprint.keys())
+  if len(catkeys) != 2:
+    print ('hm, there are more than two category one choices')
+    return
+  print (categvar, varQuestion[categvar])
+  print ('          {:>10s} {:>10s}'.format(mapResponse(sexstate,catkeys[0]), mapResponse(sexstate,catkeys[1])))
+  for k in sorted(dataDictionary[categvar].keys()):
+    v = dataDictionary[categvar][k]
+    print ('{:>10s} {:10.2f}% {:10.2f}%'.format(v, round(100*toprint[catkeys[0]].get(k, 0)/sum(toprint[catkeys[0]].values()), 2), 
+      round(100*toprint[catkeys[1]].get(k, 0)/sum(toprint[catkeys[1]].values()), 2)))
+    

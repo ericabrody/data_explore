@@ -3,6 +3,7 @@ import csv
 from dataDictionary import *
 from funct import *
 
+
 # read in the datafiles as dictionary of list of dictionaries
 datafiles = ['smallbr2013.csv','smallbr2014.csv']
 data = {}
@@ -23,29 +24,15 @@ for file in datafiles:
 # twovarfreq = twovar(data['smallbr2014.csv'], '_STATE', 'EXERANY2')
 # print ('Two Var output: ', twovarfreq)
 
-for variable in categoricalVars:
-  print (variable, varQuestion[variable])
-  thingtoprint = distribution(data['smallbr2014.csv'], variable)
-  table (thingtoprint)
-  print ()
-  histogram (thingtoprint)
-  print()
+# for catevar in ('_STATE', 'SEX'):
+#   for contvar in continousVars:
+#     printcontbysexstate (data['smallbr2014.csv'], catevar, contvar)
 
-for variable in continousVars:
-  toprint = univariate(data['smallbr2014.csv'], variable)
-  sep = ', '
-  modeStrings = []
-  for v in toprint['mode']: # for each item in the list of integers representing modes, this loop turns each item into a string, so .join works
-    modeStrings.append(str(v))
-  print (variable, varQuestion[variable])
-  print ('Minimum = ', toprint['min'])
-  print ('Maximum = ', toprint['max'])
-  print ('Mean    = ', toprint['average'])
-  print ('Median  = ', toprint['median'])
-  print ('Mode    = ', sep.join(modeStrings))
-  print ()
-  
-#print (univbyvar2 (data['smallbr2014.csv'], '_STATE', 'POORHLTH'))
+#printcateg (data['smallbr2014.csv'], 'EXERANY2')
+printcategbysexstate (data['smallbr2014.csv'], '_STATE', 'GENHLTH')
+# #printcontinuous (data['smallbr2014.csv'], 'MAXDRNKS')
+
+# print (univbyvar2 (data['smallbr2014.csv'], '_STATE', 'POORHLTH'))
 
 # whichVar = 0
 # try:

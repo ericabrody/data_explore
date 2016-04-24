@@ -58,3 +58,27 @@
 # print ('Min baddays: ', minbaddays, 'Max baddays: ', maxbaddays, 'Mode baddays: ', modebaddays)
 # print ('Median baddays: ', medianbaddays)
 # print (premode)
+
+#### Initial code to print continuous variables in a nice format - which was turned into function called printcontinuous
+# for variable in continousVars:
+#   toprint = univariate(data['smallbr2014.csv'], variable)
+#   sep = ', '
+#   modeStrings = []
+#   for v in toprint['mode']: # for each item in the list of integers representing modes, this loop turns each item into a string, so .join works
+#     modeStrings.append(str(v))
+#   print (variable, varQuestion[variable])
+#   print ('Minimum = ', toprint['min'])
+#   print ('Maximum = ', toprint['max'])
+#   print ('Mean    = ', toprint['average'])
+#   print ('Median  = ', toprint['median'])
+#   print ('Mode    = ', sep.join(modeStrings))
+#   print ()
+
+#### Initial code to print categorical variables in a nice format - which was turned into function called printcateg
+# for variable in categoricalVars:
+#   print (variable, varQuestion[variable])
+#   thingtoprint = distribution(data['smallbr2014.csv'], variable)
+#   table (thingtoprint)
+#   print ()
+#   histogram (thingtoprint)
+#   print()
