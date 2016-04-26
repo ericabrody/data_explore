@@ -2,37 +2,9 @@
 import csv
 from dataDictionary import *
 from funct import *
+from interface import *
 
-
-# read in the datafiles as dictionary of list of dictionaries
-datafiles = ['smallbr2013.csv','smallbr2014.csv']
-data = {}
-for file in datafiles:
-  with open(file) as f:
-    reader = csv.DictReader(f)
-    rows = []
-    for row in reader: # creates a list of dictionaries where each case/row is a dictionary with a key-value pair for each variable
-      rows.append(row)
-    data[file] =  rows # storing each file's list of rows in the dictionary called data, key of this dictionary is filename
-    # and the values of this dictionary are the list of dictionaries
-    print (file, reader.fieldnames) #fieldnames = property of dictreader
-    print (file)
-
-# # To view the variables names (i.e., keys)...from the first row, but could have been any row
-# print (data['smallbr2014.csv'][4].keys())
-
-# twovarfreq = twovar(data['smallbr2014.csv'], '_STATE', 'EXERANY2')
-# print ('Two Var output: ', twovarfreq)
-
-# for catevar in ('_STATE', 'SEX'):
-#   for contvar in continousVars:
-#     printcontbysexstate (data['smallbr2014.csv'], catevar, contvar)
-
-#printcateg (data['smallbr2014.csv'], 'EXERANY2')
-printcategbysexstate (data['smallbr2014.csv'], '_STATE', 'GENHLTH')
-# #printcontinuous (data['smallbr2014.csv'], 'MAXDRNKS')
-
-# print (univbyvar2 (data['smallbr2014.csv'], '_STATE', 'POORHLTH'))
+mainmenu()
 
 # whichVar = 0
 # try:
