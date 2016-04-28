@@ -32,13 +32,9 @@ def distribution(data, whichVar):
     where the key is each response value that is in the dataset and
     value is the number of times it occurs in the data; best used for categorical variables'''
   result = {}
-  keyLookup = None
-  if whichVar in dataDictionary:
-    keyLookup = dataDictionary[whichVar]
   for row in data:
     value = row[whichVar]
-    if keyLookup is not None:
-      value = keyLookup.get(value, value) # remaps values from raw number to label, if number not mapped, actual value remains
+    value = mapResponse (whichVar, value)
     if value not in result:
       result[value] = 1
     else:
@@ -53,7 +49,7 @@ def table(resultDistrib):
   for key in keys:
     if len(key) > longestlength: # getting longest length of key (i.e., response value) to use, so printing of results lines up nicely
       longestlength = len(key)
-  print ("Value", " "*(longestlength-len("value")+2), "Num Responses", "\t", "Percent of Responses")
+  print ("Value", " "*(longestlength-len("value")+2), "Num Responses", "\t", "Percent of Responses") # print header row
   for key in keys:
     print (key, " "*(longestlength-len(key)+2), resultDistrib[key], "\t\t\t", round(100*resultDistrib[key]/sum(resultDistrib.values(), 2)), "%")
 
