@@ -100,6 +100,15 @@
 
 
 ### Code to test each function
+# whichVar = 0
+# try:
+#   while whichVar != '':
+#     whichVar = input('Which variable are you interested in?')
+#     table(distribution(data['smallbr2014.csv'], whichVar))
+#     histogram (distribution(data['smallbr2014.csv'], whichVar))
+# except:
+#   print ('Thank you for using this program.')
+
 # # To view the variables names (i.e., keys)...from the first row, but could have been any row
 # print (data['smallbr2014.csv'][4].keys())
 

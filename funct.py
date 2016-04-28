@@ -17,7 +17,16 @@ def loaddata (filename):
       return []
     else:
       return rows
-    
+      
+def mapResponse (var, value):
+  ''' function to assign response value mappings from dataDictionary to data'''
+  newlabel=value
+  if var in dataDictionary:
+    if value in dataDictionary[var]:
+      newlabel = dataDictionary[var][value] # remaps values from raw number to label, if number not mapped, actual value remains - because newlabel is set to value above
+  return newlabel
+      
+
 def distribution(data, whichVar):
   '''Create a dictionary of results for a specific variable, 
     where the key is each response value that is in the dataset and
@@ -59,6 +68,18 @@ def histogram(resultDistrib):
   for key in keys:
     print (key, " "*(longestlength-len(key)+2), '*'*int(100*resultDistrib[key]/sum(resultDistrib.values())), '\t', round(100*resultDistrib[key]/sum(resultDistrib.values(), 2)), "%")
 
+def barcategbystate (data, sexstate, var2):
+  ''' Bar chart of a categorical variable by sex or state'''
+  twovarresult = twovar (data, sexstate, var2)
+  sexstatekeys = list(twovarresult.keys()) #keys of first level of dictionary (i.e., NC or CT; M or F)
+  categvarkeys = twovarresult.values() # keys of second level of dictionary (e.g., Excellent, Very good, good, fair, poor)
+  longestlength = 0
+  print (varQuestion[var2])
+  for k in sexstatekeys:
+    print ((str(mapResponse (sexstate, k)) + ' ')*10)
+    for categvar in sorted(twovarresult[k].keys()):
+      print ('{:>10s} {:10d}% {:<100s}'.format (str(mapResponse(var2, categvar)), round(100*twovarresult[k][categvar]/sum(twovarresult[k].values(), 2)), '*'*int(100*twovarresult[k][categvar]/sum(twovarresult[k].values()))))
+
 def twovar (data, var1, var2): 
   ''' Creates a dictionary of dictionaries that show for each level of var1, the frequency of each response of var 2
       - best used with categorical varilabes'''
@@ -73,6 +94,20 @@ def twovar (data, var1, var2):
     else: 
       result[value1][value2] += 1
   return result      
+  
+def printcategbysexstate (data, sexstate, categvar):
+  ''' Nice printout of a categorical variable by sex or state'''
+  toprint= twovar(data, sexstate, categvar)
+  catkeys = list(toprint.keys())
+  if len(catkeys) != 2:
+    print ('hm, there are more than two category one choices, we are not set up for this') # program is not set up for looking at a byvariable with more than 2 response values
+    return
+  print (categvar, varQuestion[categvar])
+  print ('          {:>10s} {:>10s}'.format(mapResponse(sexstate,catkeys[0]), mapResponse(sexstate,catkeys[1])))
+  for k in sorted(dataDictionary[categvar].keys()):
+    v = dataDictionary[categvar][k]
+    print ('{:>10s} {:10.2f}% {:10.2f}%'.format(v, round(100*toprint[catkeys[0]].get(k, 0)/sum(toprint[catkeys[0]].values()), 2), 
+      round(100*toprint[catkeys[1]].get(k, 0)/sum(toprint[catkeys[1]].values()), 2)))
   
 # For continuous variables in the dataset: poorhealth, sleptim1, avedrnk2
 # Create min, max, mean, mode, and median for a single variable - 
@@ -114,14 +149,6 @@ def extractvalues (data, var):
       valueslist.append(vars)
   return valueslist
 
-def mapResponse (var, value):
-  ''' function to assign response value mappings from dataDictionary to data'''
-  newlabel=value
-  if var in dataDictionary:
-    if value in dataDictionary[var]:
-      newlabel = dataDictionary[var][value] # remaps values from raw number to label, if number not mapped, actual value remains - because newlabel is set to value above
-  return newlabel
-  
 def createmedian(valueslist):
   valueslist = sorted(valueslist)
   numvalues = len(valueslist)
@@ -181,7 +208,7 @@ def printcontinuous (data, contvar):
   print ('Mode    = ', sep.join(modeStrings))
 
 def printcontbysexstate (data, categvar, contvar):
-  ''' Nice printout of a continuous variable by sex or state, which have only 2 levels/responses ech'''
+  ''' Nice printout of a continuous variable by sex or state, which have only 2 levels/responses each'''
   toprint= univbyvar2(data, categvar, contvar)
   catkeys = list(toprint.keys())
   if len(catkeys) != 2:
@@ -206,17 +233,4 @@ def modelisttostring (modevalues):
     modeStrings.append(str(v))
   return sep.join(modeStrings)
 
-def printcategbysexstate (data, sexstate, categvar):
-  ''' Nice printout of a categorical variable by sex or state'''
-  toprint= twovar(data, sexstate, categvar)
-  catkeys = list(toprint.keys())
-  if len(catkeys) != 2:
-    print ('hm, there are more than two category one choices, we are not set up for this') # program is not set up for looking at a byvariable with more than 2 response values
-    return
-  print (categvar, varQuestion[categvar])
-  print ('          {:>10s} {:>10s}'.format(mapResponse(sexstate,catkeys[0]), mapResponse(sexstate,catkeys[1])))
-  for k in sorted(dataDictionary[categvar].keys()):
-    v = dataDictionary[categvar][k]
-    print ('{:>10s} {:10.2f}% {:10.2f}%'.format(v, round(100*toprint[catkeys[0]].get(k, 0)/sum(toprint[catkeys[0]].values()), 2), 
-      round(100*toprint[catkeys[1]].get(k, 0)/sum(toprint[catkeys[1]].values()), 2)))
-    
+

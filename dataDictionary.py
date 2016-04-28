@@ -62,7 +62,7 @@ dataDictionary = {
   }
 }
 
-continousVars = ['POORHLTH', 'SLEPTIM1', 'AVEDRNK2', 'MAXDRNKS']
+continuousVars = ['POORHLTH', 'SLEPTIM1', 'AVEDRNK2', 'MAXDRNKS']
 categoricalVars = ['SMOKE100', 'GENHLTH', 'SMOKDAY2','_STATE', 'EXERANY2', 'SEX']
 
 varQuestion = {
